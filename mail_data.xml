@@ -1,0 +1,9 @@
+<openerp>
+	<data noupdate="1">
+        <!-- Complaints subtype for messaging / Chatter -->
+        <record id="mt_comment_complaints" model="mail.message.subtype">
+            <field name="name">Complaints</field>
+            <field name="sequence" eval="0"/>
+        </record>
+	</data>
+</openerp>
