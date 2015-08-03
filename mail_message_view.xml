@@ -1,15 +1,83 @@
 <openerp>
 	<data>
-        <record id="view_mail_message_tree_report" model="ir.ui.view">
-            <field name="name">Employee Logs</field>
+        <record id="inherit_mail_message_employee_field" model="ir.ui.view">
+            <field name="name">Messages</field>
             <field name="model">mail.message</field>
-            <field eval="100" name="priority"/>
+			<field name = "inherit_id" ref = "mail.view_message_form" />
             <field name="arch" type="xml">
-                <tree string="Employee Logs" create="false">
-                    <field name="journal_id" options='{"no_open":True}' invisible="context.get('journal_id',False)"/>
-                    <field name="period_id" options='{"no_open":True}' invisible="context.get('period_id',False)"/>
+                <xpath expr = "/form/sheet/group/group/field[@name='type']" position = "after">
+					<field name = "employee_id" />	
+                </xpath>
+                <xpath expr = "/form/sheet/field[@name = 'body']" position = "before">
+                	<group>
+                		<field name = "complaint" attrs = "{'invisible':[('employee_id','=',False)]}" />
+                	</group>
+               	</xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mail.view_message_tree">
+            <field name="name">mail.message.tree</field>
+            <field name="model">mail.message</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <tree string="Messages">
+                    <field name="date"/>
+                    <field name="subject" invisible="context.get('render_javascript',False)"/>
+					<field name = "employee_id" invisible="not context.get('render_javascript',False)" />
+					<field name = "complaint" invisible="not context.get('render_javascript',False)" />
+                    <field name="author_id"/>
+                    <field name="model" invisible="context.get('render_javascript',False)"/>
+                    <field name="res_id" invisible="context.get('render_javascript',False)"/>
                 </tree>
             </field>
         </record>
+
+        <record id="action_mail_message_all_a" model="ir.actions.act_window">
+            <field name="name">Complaints</field>
+            <field name = "context">{'render_javascript':True}</field>
+            <field name="res_model">mail.message</field>
+            <field name= "view_type">form</field>
+			<field name= "view_mode">tree_mail_message_quickadds</field>
+        </record>
+        
+		<menuitem name="Employee Logs" id="complaints_empployees_child" groups = "pls.telecom_corporate" parent="hr.menu_hr_main"  sequence="100"/>
+        <menuitem name="Complaints" id="complaints_empployees_subchild" groups = "pls.telecom_corporate" parent="complaints_empployees_child" action="action_mail_message_all_a" sequence="100"/>
+
+        <!-- mail.message wizard for logging complaints -->
+        <record id="wizard_empployee_loggin_complaint" model = "ir.ui.view">
+        	<field name = "name">Log a Complaint</field>
+        	<field name = "model">mail.message</field>
+        	<field name = "priority">100</field>
+			<field name = "arch" type="xml">
+				<form string = "log a complaint">
+					<group>
+						<field name = "employee_id"/>
+						<field name = "date" />
+						<field name = "complaint" />					
+					</group>
+					<footer>
+						<button name = "log_complaint" string = "Log" type = "object" class = "oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+        </record>
+        
+        <record id="action_mail_message_log_a_complaint" model="ir.actions.act_window">
+            <field name="name">Log a Complaint</field>
+            <field name = "target">new</field>
+            <field name = "context">{'default_subtype_complaint':True}</field>
+            <field name="res_model">mail.message</field>
+            <field name= "view_type">form</field>
+			<field name= "view_mode">form</field>
+			<field name = "view_id" ref="wizard_empployee_loggin_complaint" />
+        </record>			
+        
+        <menuitem  id="menuitem_complaints_empployees_subchild_log_a_complaint" groups = "pls.telecom_corporate" parent="complaints_empployees_child" action="action_mail_message_log_a_complaint" sequence="100"/>
+
+
+        
 	</data>
 </openerp>
