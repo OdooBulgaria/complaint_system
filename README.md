@@ -17,4 +17,12 @@
 	- [x] Create a wizard to log a complaint
 	 	
 	> In short all the mail.message with subtype 'complaints' related document hr.employee and related id = id of employee will give
-	> the biodata of the employee (This will be our standard employee log) 
+	> the biodata of the employee (This will be our standard employee log)
+	
+## Using this module
+
+- In order to use this module do the follwing
+	- Create a mail.message
+	- Enter the employee_id in mail.message
+	- Choose the subtype as "Complaint"
+	- Goto HR Module and then check Employee Logs menuitem 
