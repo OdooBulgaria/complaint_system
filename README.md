@@ -8,6 +8,7 @@
 > Do not delete the subtype "Complaint". 
 > FIX: change the noupdate of mail_data.xml file to 0 and then upgrade the module
 
+
 ## Manager Note Logging
 - [x] Create a functional field many2many that will automatically fetch all the mail.message regarding that manager and display
 	- [x] Created a subtype
@@ -19,10 +20,12 @@
 	> In short all the mail.message with subtype 'complaints' related document hr.employee and related id = id of employee will give
 	> the biodata of the employee (This will be our standard employee log)
 	
-## Using this module
+## Using this Module
 
 - In order to use this module do the follwing
 	- Create a mail.message
 	- Enter the employee_id in mail.message
 	- Choose the subtype as "Complaint"
-	- Goto HR Module and then check Employee Logs menuitem 
+	- Goto HR Module and then check Employee Logs menuitem
+	 
+- The "Employee Log" menuitem is only visible to HR Manager
