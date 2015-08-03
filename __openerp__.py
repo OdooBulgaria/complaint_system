@@ -32,7 +32,7 @@
     """,
     'author': 'J & G Infosystems',
     'website': 'www.jginfosystems.com',
-    'depends': ['base','mail','hr','pls'],
+    'depends': ['base','mail','hr'],
     'data': [
              'mail_data.xml',
              'mail_message_view.xml',

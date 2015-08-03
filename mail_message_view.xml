@@ -41,8 +41,8 @@
 			<field name= "view_mode">tree_mail_message_quickadds</field>
         </record>
         
-		<menuitem name="Employee Logs" id="complaints_empployees_child" groups = "pls.telecom_corporate" parent="hr.menu_hr_main"  sequence="100"/>
-        <menuitem name="Complaints" id="complaints_empployees_subchild" groups = "pls.telecom_corporate" parent="complaints_empployees_child" action="action_mail_message_all_a" sequence="100"/>
+		<menuitem name="Employee Logs" id="complaints_empployees_child" groups = "base.group_hr_manager" parent="hr.menu_hr_main"  sequence="100"/>
+        <menuitem name="Complaints" id="complaints_empployees_subchild" groups = "base.group_hr_manager" parent="complaints_empployees_child" action="action_mail_message_all_a" sequence="100"/>
 
         <!-- mail.message wizard for logging complaints -->
         <record id="wizard_empployee_loggin_complaint" model = "ir.ui.view">
@@ -74,7 +74,7 @@
 			<field name = "view_id" ref="wizard_empployee_loggin_complaint" />
         </record>			
         
-        <menuitem  id="menuitem_complaints_empployees_subchild_log_a_complaint" groups = "pls.telecom_corporate" parent="complaints_empployees_child" action="action_mail_message_log_a_complaint" sequence="100"/>
+        <menuitem  id="menuitem_complaints_empployees_subchild_log_a_complaint" groups = "base.group_hr_manager" parent="complaints_empployees_child" action="action_mail_message_log_a_complaint" sequence="100"/>
 
 
         
