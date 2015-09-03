@@ -16,10 +16,11 @@ openerp.complaint_system = function (instance) {
             self.from = null;
             self.subtype = null
             self.to = null;
+            self.defs = [];
         },
         start:function(){
-            var defs = [];
             var self = this;
+            console.log("======================mail_message")
             return this._super.apply(this, arguments).then(function(){
                 if ('render_javascript' in self.dataset.context){
                     self.$el.parent().prepend(QWeb.render("MailMessageQuickAdd", {widget: this}));
@@ -40,15 +41,15 @@ openerp.complaint_system = function (instance) {
                     	self.do_search(self.last_domain, self.last_context, self.last_group_by);
                     });            
                     var mod = new instance.web.Model("hr.employee", self.dataset.context, self.dataset.domain);
-                    defs.push(mod.call("list_employees", []).then(function(result) {
+                    self.defs.push(mod.call("list_employees", []).then(function(result) {
                     	self.employees = result;
                     }));
                     var view_id = new openerp.Model('ir.model.data');
-                    defs.push(view_id.call("get_object_reference", ['complaint_system','mt_comment_complaints']).then(function(result) {
+                    self.defs.push(view_id.call("get_object_reference", ['complaint_system','mt_comment_complaints']).then(function(result) {
                     		self.subtype = result[1]
                     }));                        	
                 }
-                return $.when(defs);            	
+                return $.when(self.defs);            	
             })
         },
         
@@ -61,15 +62,18 @@ openerp.complaint_system = function (instance) {
             var o;
             self.$el.parent().find('.oe_select').children().remove().end();
             self.$el.parent().find('.oe_select').append(new Option('', ''));
-            for (var i = 0;i < self.employees.length;i++){
-            	o = new Option(self.employees[i][1], self.employees[i][0]);
-                self.$el.parent().find('.oe_select').append(o);
-            }
-            return self.search_by_employee_id();
+            return $.when(self.defs).then(function(){
+                for (var i = 0;i < self.employees.length;i++){
+                	o = new Option(self.employees[i][1], self.employees[i][0]);
+                    self.$el.parent().find('.oe_select').append(o);
+                }
+                return self.search_by_employee_id();            	
+            })
         },
         search_by_employee_id: function() {
             var self = this;
             var domain = [];
+            console.log("===========================search_employee_by_id",self.subtype)
             if (self.current_employee !== null) domain.push(["employee_id", "=", self.current_employee]);
             domain.push(['subtype_id','=',self.subtype]);
             if (self.from !== null) domain.push(['create_date','>=',self.from])
