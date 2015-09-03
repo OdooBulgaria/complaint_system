@@ -20,7 +20,6 @@ openerp.complaint_system = function (instance) {
         },
         start:function(){
             var self = this;
-            console.log("======================mail_message")
             return this._super.apply(this, arguments).then(function(){
                 if ('render_javascript' in self.dataset.context){
                     self.$el.parent().prepend(QWeb.render("MailMessageQuickAdd", {widget: this}));
