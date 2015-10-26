@@ -68,7 +68,6 @@ openerp.complaint_system = function (instance) {
                 	o = new Option(self.employees[i][1], self.employees[i][0]);
                     self.$el.parent().find('.oe_select').append(o);
                 }
-                console.log("=================",self.current_employee)	
                 self.$el.parent().find('.oe_select').val(self.current_employee)
                 return self.search_by_employee_id();            	
             })
