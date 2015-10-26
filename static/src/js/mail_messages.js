@@ -4,7 +4,7 @@ openerp.complaint_system = function (instance) {
     var QWeb = instance.web.qweb;
     
     instance.web.complaint_system = instance.web.complaint_system || {};
-
+    
     instance.web.views.add('tree_mail_message_quickadds', 'instance.web.complaint_system.filter_view_message');
     instance.web.complaint_system.filter_view_message = instance.web.ListView.extend({
         init: function() {
@@ -25,8 +25,10 @@ openerp.complaint_system = function (instance) {
                     self.$el.parent().prepend(QWeb.render("MailMessageQuickAdd", {widget: this}));
                     self.$el.parent().find('.oe_select').change(function() {
                     		self.current_employee = this.value === '' ? null : parseInt(this.value);
+        	                self.current_employee = parseInt(this.value)
         	                self.do_search(self.last_domain, self.last_context, self.last_group_by);
-        	            });
+        	            
+                    });
                     self.$el.parent().find("input#from").change(function(){
                     	if (this.value !== "") 
                     		self.from = this.value;
@@ -66,13 +68,14 @@ openerp.complaint_system = function (instance) {
                 	o = new Option(self.employees[i][1], self.employees[i][0]);
                     self.$el.parent().find('.oe_select').append(o);
                 }
+                console.log("=================",self.current_employee)	
+                self.$el.parent().find('.oe_select').val(self.current_employee)
                 return self.search_by_employee_id();            	
             })
         },
         search_by_employee_id: function() {
             var self = this;
             var domain = [];
-            console.log("===========================search_employee_by_id",self.subtype)
             if (self.current_employee !== null) domain.push(["employee_id", "=", self.current_employee]);
             domain.push(['subtype_id','=',self.subtype]);
             if (self.from !== null) domain.push(['create_date','>=',self.from])
